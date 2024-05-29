@@ -21,10 +21,9 @@ This project renders an animated spinning donut in the terminal using C. The don
 
 ### Building and Running
 
-    ```sh
-    git clone https://github.com/elbachir-one/donut.git
-    cd donut/
-    make
-    ./donut
-    ```
-
+```bash
+git clone https://github.com/elbachir-one/donut.git
+cd donut/
+make
+./donut
+```

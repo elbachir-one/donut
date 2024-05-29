@@ -4,7 +4,7 @@ This project renders an animated spinning donut in the terminal using C. The don
 
 ## Demo
 
-[![Watch the video](https://img.youtube.com/vi/BJFyAGFB3GI/maxresdefault.jpg)](https://www.youtube.com/watch?v=BJFyAGFB3GI)
+[![Watch the video](donut.GIF)
 
 ## Features
 

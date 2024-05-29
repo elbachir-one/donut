@@ -57,8 +57,8 @@ void renderFrame(float A, float B, int width, int height) {
             float D = 1 / (c * h * e + f * g + 5);
             float l = cos(i), m = cos(B), n = sin(B);
             float t = c * h * g - f * e;
-            int x = centerX + 30 * D * (l * h * m - t * n);
-            int y = centerY + 15 * D * (l * h * n + t * m);
+            int x = centerX + 50 * D * (l * h * m - t * n);
+            int y = centerY + 25 * D * (l * h * n + t * m);
             int o = x + width * y;
             int N = 8 * ((f * e - c * d * g) * m - c * d * e - f * g - l * d * n);
 

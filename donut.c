@@ -2,14 +2,39 @@
 #include <string.h>
 #include <math.h>
 #include <unistd.h> // For usleep()
+#include <sys/ioctl.h> // For terminal size
 
-int k;
-double sin(), cos();
+void renderFrame(float A, float B, int width, int height);
 
 int main() {
-    float A = 0, B = 0, i, j, z[1760];
-    char b[1760];
-    char *colors[] = {
+    float A = 0, B = 0;
+
+    printf("\x1b[2J"); // Clear screen
+    for (;;) {
+        struct winsize w;
+        ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+
+        int width = w.ws_col;
+        int height = w.ws_row;
+
+        renderFrame(A, B, width, height);
+        A += 0.02; // Increment angle A
+        B += 0.01; // Increment angle B
+        usleep(30000); // Delay to slow down the animation (30 milliseconds)
+    }
+
+    return 0;
+}
+
+void renderFrame(float A, float B, int width, int height) {
+    int k;
+    float i, j;
+
+    int buffer_size = width * height;
+    float z[buffer_size];
+    char b[buffer_size];
+
+    const char *colors[] = {
         "\x1b[31m", // Red
         "\x1b[32m", // Green
         "\x1b[33m", // Yellow
@@ -20,33 +45,37 @@ int main() {
     };
     int num_colors = sizeof(colors) / sizeof(colors[0]);
 
-    printf("\x1b[2J");
-    for (;;) {
-        memset(b, 32, 1760);
-        memset(z, 0, 7040);
-        for (j = 0; 6.28 > j; j += 0.07)
-            for (i = 0; 6.28 > i; i += 0.02) {
-                float c = sin(i), d = cos(j), e = sin(A), f = sin(j), g = cos(A), h = d + 2,
-                      D = 1 / (c * h * e + f * g + 5), l = cos(i), m = cos(B), n = sin(B), t = c * h * g - f * e;
-                int x = 40 + 30 * D * (l * h * m - t * n), y = 12 + 15 * D * (l * h * n + t * m),
-                    o = x + 80 * y, N = 8 * ((f * e - c * d * g) * m - c * d * e - f * g - l * d * n);
-                if (22 > y && y > 0 && x > 0 && 80 > x && D > z[o]) {
-                    z[o] = D;
-                    b[o] = ".,-~:;=!*#$@"[N > 0 ? N : 0];
-                }
-            }
-        printf("\x1b[H");
-        for (k = 0; 1760 > k; k++) {
-            // Apply color cycling through the colors array
-            if (k % 80 == 0) {
-                putchar(10); // New line
-            } else {
-                printf("%s%c", colors[k % num_colors], b[k]);
+    int centerX = width / 2;
+    int centerY = height / 2;
+
+    memset(b, 32, buffer_size); // Initialize buffer with spaces
+    memset(z, 0, buffer_size * sizeof(float)); // Initialize z-buffer with zeros
+
+    for (j = 0; j < 6.28; j += 0.07) {
+        for (i = 0; i < 6.28; i += 0.02) {
+            float c = sin(i), d = cos(j), e = sin(A), f = sin(j), g = cos(A), h = d + 2;
+            float D = 1 / (c * h * e + f * g + 5);
+            float l = cos(i), m = cos(B), n = sin(B);
+            float t = c * h * g - f * e;
+            int x = centerX + 30 * D * (l * h * m - t * n);
+            int y = centerY + 15 * D * (l * h * n + t * m);
+            int o = x + width * y;
+            int N = 8 * ((f * e - c * d * g) * m - c * d * e - f * g - l * d * n);
+
+            if (height > y && y > 0 && x > 0 && width > x && D > z[o]) {
+                z[o] = D;
+                b[o] = ".,-~:;=!*#$@"[N > 0 ? N : 0];
             }
         }
-        printf("\x1b[0m"); // Reset colors
-        A += 0.02; // Smaller increment to slow down rotation
-        B += 0.01; // Smaller increment to slow down rotation
-        usleep(30000); // Delay to further slow down the animation (30 milliseconds)
     }
+
+    printf("\x1b[H"); // Move cursor to home position
+    for (k = 0; k < buffer_size; k++) {
+        if (k % width == 0) {
+            putchar('\n'); // New line
+        } else {
+            printf("%s%c", colors[k % num_colors], b[k]);
+        }
+    }
+    printf("\x1b[0m"); // Reset colors
 }

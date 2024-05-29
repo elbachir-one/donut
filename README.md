@@ -16,7 +16,7 @@ This project renders an animated spinning donut in the terminal using C. The don
 
 ### Prerequisites
 
-- A C compiler (e.g., `gcc`)
+- A C compiler (e.g., `gcc` `tcc`)
 - A terminal that supports ANSI escape codes for color
 
 ### Building and Running

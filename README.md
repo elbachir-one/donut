@@ -27,3 +27,6 @@ cd donut/
 make
 ./donut
 ```
+## Contributing
+
+Contributions, issues, and feature requests are always welcome! Thank you.

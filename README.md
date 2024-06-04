@@ -6,6 +6,8 @@ This project renders an animated spinning donut in the terminal using C. The don
 
 ![Watch the video](assets/donut.gif)
 
+![Watch the video](assets/two-donuts.gif)
+
 ## Features
 
 - ASCII art rendering of a spinning donut

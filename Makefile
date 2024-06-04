@@ -3,6 +3,7 @@ CFLAGS = -Wall -O2 -lm
 TARGET = donut
 SRCS = donut.c
 OBJS = $(SRCS:.c=.o)
+PREFIX = /usr/local
 
 all: $(TARGET)
 
@@ -18,4 +19,11 @@ clean:
 run: $(TARGET)
 	./$(TARGET)
 
-.PHONY: all clean run
+install: $(TARGET)
+	install -d $(PREFIX)/bin
+	install -m 755 $(TARGET) $(PREFIX)/bin
+
+uninstall:
+	rm -f $(PREFIX)/bin/$(TARGET)
+
+.PHONY: all clean run install uninstall

@@ -33,6 +33,10 @@ cd donut/
 make
 ./donut
 ```
+### Note
+
+If you want to display only one donut, you can do so in the config.h file by changing the option from one to zero.
+
 ## Contributing
 
 Contributions, issues, and feature requests are always welcome! Thank you.
